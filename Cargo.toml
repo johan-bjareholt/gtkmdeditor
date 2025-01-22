@@ -1,0 +1,13 @@
+[package]
+name = "gtkmdeditor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+logos = "0.14"
+gtk4 = "0.9"
+
+[examples]
+
+[[example]]
+name = "testwidget"
