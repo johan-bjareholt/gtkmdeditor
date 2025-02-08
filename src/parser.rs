@@ -3,7 +3,7 @@ use std::ops::Range;
 use logos::Logos;
 
 #[derive(Debug, Logos, PartialEq, Clone)]
-enum Attribute {
+pub enum Attribute {
     #[regex("#[^\n]*")]
     Heading1,
     #[regex("##[^\n]*")]
@@ -29,17 +29,14 @@ enum Attribute {
 }
 
 #[derive(Debug)]
-struct Span {
-    range: Range<usize>,
-    attr: Attribute,
+pub struct Span {
+    pub range: Range<usize>,
+    pub attr: Attribute,
 }
 
 impl Span {
     pub fn new(range: Range<usize>, attr: Attribute) -> Self {
-        Self {
-            range,
-            attr
-        }
+        Self { range, attr }
     }
 }
 
@@ -100,7 +97,6 @@ mod tests {
         let slice: &str = &text[attributes[0].range.clone()];
         assert_eq!(slice, "**bold**");
 
-
         let text = "this is __bold__ but not anymore";
 
         let attributes = get_attributes(text);
@@ -121,7 +117,6 @@ mod tests {
         assert_eq!(attributes[0].attr, Attribute::Italic);
         let slice: &str = &text[attributes[0].range.clone()];
         assert_eq!(slice, "*italic*");
-
 
         let text = "this is _italic_ but not anymore";
 
