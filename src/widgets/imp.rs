@@ -1,5 +1,4 @@
 use crate::parser::{self, Attribute};
-use gtk::glib::clone;
 use gtk::glib::{self, SignalHandlerId};
 use gtk::pango;
 use gtk::prelude::*;
@@ -109,7 +108,7 @@ impl GtkMdEditor {
         *self.tags.borrow_mut() = Some(tags);
 
         // Connect to buffer changes
-        let handler_id = buffer.connect_changed(glib::clone!(@weak obj => move |buffer| {
+        let handler_id = buffer.connect_changed(glib::clone!(#[weak] obj,  move |buffer| {
             let text = buffer.text(&buffer.start_iter(), &buffer.end_iter(), false);
             Self::update_highlighting(&obj, buffer, &text);
         }));

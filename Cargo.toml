@@ -4,15 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-logos = "0.14"
+logos = "0.15"
 gtk4 = "0.9"
 libc = "0.2"
 ctor = "0.2"
 
 [lib]
 crate-type = ["lib", "cdylib"]
-
-[examples]
 
 [[example]]
 name = "testwidget"
