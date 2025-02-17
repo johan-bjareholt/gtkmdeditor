@@ -1,4 +1,5 @@
 use crate::parser::{self, Attribute};
+use gtk::glib::clone;
 use gtk::glib::{self, SignalHandlerId};
 use gtk::pango;
 use gtk::prelude::*;

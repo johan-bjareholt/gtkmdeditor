@@ -46,7 +46,6 @@ pub fn get_attributes(text: &str) -> Vec<Span> {
 
     while let Some(res) = lexer.next() {
         if let Ok(token) = res {
-            println!("token: {}", lexer.slice());
             let span = Span::new(lexer.span().start..lexer.span().end, token.clone());
             v.push(span);
         }

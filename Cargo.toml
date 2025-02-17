@@ -6,6 +6,11 @@ edition = "2021"
 [dependencies]
 logos = "0.14"
 gtk4 = "0.9"
+libc = "0.2"
+ctor = "0.2"
+
+[lib]
+crate-type = ["lib", "cdylib"]
 
 [examples]
 
