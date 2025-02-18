@@ -25,3 +25,20 @@ uninstall:
 	rm -f $(PREFIX)/lib/libgtkmdeditor.so
 	rm -rf $(PREFIX)/include/gtkmdeditor
 	rm -f $(PREFIX)/lib/pkgconfig/gtkmdeditor.pc
+
+# C-example
+CC = gcc
+PKGCONFIG = pkg-config
+
+CFLAGS = $(shell $(PKGCONFIG) --cflags gtk4) -I./target/debug/include/gtkmdeditor
+LDFLAGS = $(shell $(PKGCONFIG) --libs gtk4) -L./target/debug -lgtkmdeditor
+
+.PHONY: build-c-example
+build-c-example: target/c_example
+
+target/c_example: examples/c_example.c build
+	mkdir -p target
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
+
+run-c-example: target/c_example
+	LD_LIBRARY_PATH=./target/debug $<
