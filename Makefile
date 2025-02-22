@@ -1,5 +1,5 @@
 #CARGO_FLAGS=--release
-PREFIX=/usr/local
+PREFIX:=/usr/local
 
 SOFILE=target/debug/libgtkmdeditor.so
 HEADER=target/debug/include/gtkmdeditor/gtkmdeditor.h
