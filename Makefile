@@ -1,4 +1,6 @@
-#CARGO_FLAGS=--release
+#CARGO_FLAGS:=
+#CARGO_FLAGS:=--release
+
 PREFIX:=/usr/local
 
 SOFILE=target/debug/libgtkmdeditor.so
@@ -6,6 +8,10 @@ HEADER=target/debug/include/gtkmdeditor/gtkmdeditor.h
 PCFILE=target/debug/gtkmdeditor.pc
 
 all: build
+
+.PHONY:
+fetch:
+	cargo $(CARGO_FLAGS) fetch --manifest-path Cargo.toml --verbose
 
 .PHONY: build
 build:
@@ -34,9 +40,9 @@ CFLAGS = $(shell $(PKGCONFIG) --cflags gtk4) -I./target/debug/include/gtkmdedito
 LDFLAGS = $(shell $(PKGCONFIG) --libs gtk4) -L./target/debug -lgtkmdeditor
 
 .PHONY: build-c-example
-build-c-example: target/c_example
+build-c-example: target/testeditor_c
 
-target/c_example: examples/c_example.c build
+target/c_example: examples/testeditor.c build
 	mkdir -p target
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
 

@@ -13,4 +13,4 @@ ctor = "0.2"
 crate-type = ["lib", "cdylib"]
 
 [[example]]
-name = "testwidget"
+name = "testeditor"
