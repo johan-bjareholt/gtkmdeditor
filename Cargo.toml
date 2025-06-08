@@ -14,3 +14,6 @@ crate-type = ["lib", "cdylib"]
 
 [[example]]
 name = "testeditor"
+
+[[example]]
+name = "testviewer"

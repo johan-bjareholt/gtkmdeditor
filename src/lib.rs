@@ -1,8 +1,11 @@
 pub mod ffi;
 mod parser;
-mod widgets;
+mod editor;
+mod viewer;
+mod tags;
 
-pub use widgets::GtkMdEditor;
+pub use editor::GtkMdEditor;
+pub use viewer::GtkMdViewer;
 
 // Ensure the C API is initialized
 #[cfg(target_family = "unix")]

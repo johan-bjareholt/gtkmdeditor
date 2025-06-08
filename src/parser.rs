@@ -1,19 +1,23 @@
 use std::ops::Range;
 
-use logos::Logos;
+use logos::{Logos, Lexer};
+
+fn lex_to_string(lex: &mut Lexer<Attribute>) -> String {
+    lex.slice().to_string()
+}
 
 #[derive(Debug, Logos, PartialEq, Clone)]
 pub enum Attribute {
-    #[regex("#[^\n]*")]
-    Heading1,
-    #[regex("##[^\n]*")]
-    Heading2,
-    #[regex("###[^\n]*")]
-    Heading3,
-    #[regex("####[^\n]*")]
-    Heading4,
-    #[regex("#####[^\n]*")]
-    Heading5,
+    #[regex("#[^\n]*", lex_to_string)]
+    Heading1(String),
+    #[regex("##[^\n]*", lex_to_string)]
+    Heading2(String),
+    #[regex("###[^\n]*", lex_to_string)]
+    Heading3(String),
+    #[regex("####[^\n]*", lex_to_string)]
+    Heading4(String),
+    #[regex("#####[^\n]*", lex_to_string)]
+    Heading5(String),
 
     #[regex(r"\*[^\n\*]*\*")]
     #[regex(r"\_[^\n\_]*\_")]
