@@ -2,11 +2,10 @@ use gtk4 as gtk;
 use gtk::glib::{self, SignalHandlerId};
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::TextBuffer;
 use std::cell::RefCell;
 
 use crate::parser;
-use crate::tags::Tags;
+use crate::tags::{Tags, GtkMdBlock};
 
 // Object holding the state
 #[derive(Default)]
@@ -40,20 +39,19 @@ impl GtkMdEditor {
         *self.buffer_changed_handler.borrow_mut() = Some(handler_id);
     }
 
-    fn update_highlighting(widget: &super::GtkMdEditor, buffer: &TextBuffer, text: &str) {
+    fn update_highlighting(widget: &super::GtkMdEditor, buffer: &gtk::TextBuffer, text: &str) {
         // Remove all existing tags
         buffer.remove_all_tags(&buffer.start_iter(), &buffer.end_iter());
 
-        // Get new attributes from parser
-        let attributes = parser::get_attributes(text);
+        // Get new blocks from parser
+        let blocks = parser::get_blocks(text);
+        let gtk_blocks = blocks.iter().map(|block| GtkMdBlock::new_from_block(block, buffer));
 
         // Get tags instance
         if let Some(tags) = &*widget.imp().tags.borrow() {
             // Apply tags based on parser results
-            for span in attributes {
-                let start = buffer.iter_at_offset(span.range.start as i32);
-                let end = buffer.iter_at_offset(span.range.end as i32);
-                buffer.apply_tag(tags.get_tag_for_attr(&span.attr), &start, &end);
+            for block in gtk_blocks {
+                block.apply_block_editor(&tags);
             }
         }
     }

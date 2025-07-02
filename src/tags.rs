@@ -2,7 +2,7 @@ use gtk4 as gtk;
 use gtk::prelude::*;
 use gtk::pango;
 
-use crate::parser::Attribute;
+use crate::parser::{Block, Attribute};
 
 pub struct Tags {
     heading1: gtk::TextTag,
@@ -74,9 +74,71 @@ impl Tags {
             Attribute::Heading3(_) => &self.heading3,
             Attribute::Heading4(_) => &self.heading4,
             Attribute::Heading5(_) => &self.heading5,
-            Attribute::Bold => &self.bold,
-            Attribute::Italic => &self.italic,
-            Attribute::Link | Attribute::Picture => &self.link,
+            Attribute::Bold(_) => &self.bold,
+            Attribute::Italic(_) => &self.italic,
+            Attribute::Link(_) | Attribute::Picture => &self.link,
+        }
+    }
+}
+
+pub struct GtkMdBlock {
+    pub span_start: gtk::TextMark,
+    pub span_end: gtk::TextMark,
+    pub attr: Attribute,
+}
+
+impl GtkMdBlock {
+    pub fn new_from_block(block: &Block, text_buffer: &gtk::TextBuffer) -> Self {
+        let start_iter = text_buffer.iter_at_offset(block.span.start as i32);
+        let end_iter = text_buffer.iter_at_offset(block.span.end as i32);
+
+        let start_mark = text_buffer.create_mark(None, &start_iter, true);
+        let end_mark = text_buffer.create_mark(None, &end_iter, false);
+
+        Self {
+            span_start: start_mark,
+            span_end: end_mark,
+            attr: block.attr.clone()
+        }
+    }
+
+    pub fn apply_block_editor(&self, tags: &Tags) {
+        let tag = tags.get_tag_for_attr(&self.attr);
+        let buffer = self.span_start.buffer().unwrap();
+        let start_iter = buffer.iter_at_mark(&self.span_start);
+        let end_iter = buffer.iter_at_mark(&self.span_end);
+        buffer.apply_tag(tag, &start_iter, &end_iter);
+    }
+
+    pub fn apply_block_viewer(&self, tags: &Tags) {
+        let tag = tags.get_tag_for_attr(&self.attr);
+        let buffer = self.span_start.buffer().unwrap();
+        match &self.attr {
+            Attribute::Heading1(text) |
+            Attribute::Heading2(text) |
+            Attribute::Heading3(text) |
+            Attribute::Heading4(text) |
+            Attribute::Heading5(text) |
+            Attribute::Bold(text) |
+            Attribute::Italic(text) => {
+                buffer.delete(
+                    &mut buffer.iter_at_mark(&self.span_start),
+                    &mut buffer.iter_at_mark(&self.span_end),
+                );
+                buffer.insert_with_tags(
+                    &mut buffer.iter_at_mark(&self.span_start),
+                    text,
+                    &[tag]
+                );
+            },
+            Attribute::Link(_) |
+            Attribute::Picture => {
+                buffer.apply_tag(
+                    tag,
+                    &mut buffer.iter_at_mark(&self.span_start),
+                    &mut buffer.iter_at_mark(&self.span_end),
+                );
+            },
         }
     }
 }

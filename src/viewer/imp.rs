@@ -4,7 +4,7 @@ use gtk::subclass::prelude::*;
 use gtk4 as gtk;
 
 use crate::parser;
-use crate::tags::Tags;
+use crate::tags::{Tags, GtkMdBlock};
 
 // Object holding the state
 #[derive(Default)]
@@ -15,18 +15,16 @@ impl GtkMdViewer {
         // Initialize tags
         let tags = Tags::new(&buffer);
 
-        // Apply tags
-        let text = buffer.text(&buffer.start_iter(), &buffer.end_iter(), false);
-        println!("buffer text is: {}", text);
-
-        // Get attributes from parser
-        let attributes = parser::get_attributes(&text);
+        // Get blocks from parser
+        let text = buffer.text(&buffer.start_iter(), &buffer.end_iter(), true);
+        let blocks = parser::get_blocks(&text);
+        // FIXME: Why does this need to be reversed? I don't know, but otherwise the marks are
+        // positioned wrong...
+        let gtk_blocks = blocks.iter().rev().map(|block| GtkMdBlock::new_from_block(block, buffer));
 
         // Apply tags based on parser results
-        for span in attributes {
-            let start = buffer.iter_at_offset(span.range.start as i32);
-            let end = buffer.iter_at_offset(span.range.end as i32);
-            buffer.apply_tag(tags.get_tag_for_attr(&span.attr), &start, &end);
+        for block in gtk_blocks {
+            block.apply_block_viewer(&tags);
         }
     }
 }
