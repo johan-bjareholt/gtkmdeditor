@@ -30,7 +30,7 @@ fn main() -> glib::ExitCode {
         let file_path = if args.len() > 1 {
             &args[1]
         } else {
-            "test.md"
+            "examples/test.md"
         };
 
         // Read markdown from file

@@ -40,11 +40,11 @@ static void activate(GtkApplication *app, gpointer user_data) {
 int main(int argc, char **argv) {
     AppData app_data;
     
-    // Use provided file path or default to test.md
+    // Use provided file path or default to examples/test.md
     if (argc > 1) {
         app_data.file_path = argv[1];
     } else {
-        app_data.file_path = "test.md";
+        app_data.file_path = "examples/test.md";
     }
 
     GtkApplication *app = gtk_application_new("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);

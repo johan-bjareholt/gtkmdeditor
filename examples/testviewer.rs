@@ -28,7 +28,7 @@ fn main() -> glib::ExitCode {
         let file_path = if args.len() > 1 {
             &args[1]
         } else {
-            "test.md"
+            "examples/test.md"
         };
 
         // Read markdown from file
@@ -39,6 +39,7 @@ fn main() -> glib::ExitCode {
                     .parent()
                     .and_then(|p| p.to_str())
                     .unwrap_or("./");
+
                 (content, img_prefix.to_string())
             }
             Err(e) => {
