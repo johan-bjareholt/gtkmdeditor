@@ -22,6 +22,7 @@ enum ContentBlock {
 #[derive(Default)]
 pub struct GtkMdViewer {
     img_prefix: std::cell::RefCell<String>,
+    md_text: std::cell::RefCell<String>,
 }
 
 impl GtkMdViewer {
@@ -155,6 +156,11 @@ impl ObjectImpl for GtkMdViewer {
         // Set vertical orientation for the box
         let obj = self.obj();
         obj.set_orientation(gtk::Orientation::Vertical);
+        
+        // Render content after construction when both properties are available
+        let md_text = self.md_text.borrow();
+        let img_prefix = self.img_prefix.borrow();
+        self.render_content(&md_text, &img_prefix);
     }
 
     fn properties() -> &'static [glib::ParamSpec] {
@@ -188,13 +194,19 @@ impl ObjectImpl for GtkMdViewer {
         match pspec.name() {
             "md-text" => {
                 let md_text = value.get::<String>().expect("Type checked by GObject");
-                let img_prefix = self.img_prefix.borrow().clone();
-                self.render_content(&md_text, &img_prefix);
+                *self.md_text.borrow_mut() = md_text;
             }
             "img-prefix" => {
                 let img_prefix = value.get::<String>().expect("Type checked by GObject");
                 *self.img_prefix.borrow_mut() = img_prefix;
             }
+            _ => {}
+        }
+    }
+
+    fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+        match pspec.name() {
+            "img-prefix" => self.img_prefix.borrow().to_value(),
             _ => unimplemented!(),
         }
     }
