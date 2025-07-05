@@ -1,24 +1,8 @@
 use gtk::glib;
 use gtk::prelude::*;
 use gtk4 as gtk;
-
-static EXAMPLE_TEXT: &str = "# Markdown Test Document
-
-## Formatting
-
-This is a **bold** text and this is *italic*.
-You can also use __bold__ and _italic_ with underscores.
-
-### Links
-
-Here's a [link to Google](https://google.com)
-And here's an image: ![cute cat](cat.jpg)
-
-#### Lists and More
-
-##### Small Heading
-
-This viewer supports various markdown features!";
+use std::fs;
+use std::env;
 
 fn main() -> glib::ExitCode {
     let application = gtk::Application::builder()
@@ -39,7 +23,31 @@ fn main() -> glib::ExitCode {
             .vexpand(true)
             .build();
 
-        let mdviewer = gtkmdeditor::GtkMdViewer::new_with_image_prefix(EXAMPLE_TEXT, "./");
+        // Get file path from args or use default
+        let args: Vec<String> = env::args().collect();
+        let file_path = if args.len() > 1 {
+            &args[1]
+        } else {
+            "test.md"
+        };
+
+        // Read markdown from file
+        let (markdown_content, img_prefix) = match fs::read_to_string(file_path) {
+            Ok(content) => {
+                // Use the directory of the markdown file as image prefix
+                let img_prefix = std::path::Path::new(file_path)
+                    .parent()
+                    .and_then(|p| p.to_str())
+                    .unwrap_or("./");
+                (content, img_prefix.to_string())
+            }
+            Err(e) => {
+                eprintln!("Error reading file '{}': {}", file_path, e);
+                (format!("# Error\n\nCould not read file: {}\n\nError: {}", file_path, e), "./".to_string())
+            }
+        };
+
+        let mdviewer = gtkmdeditor::GtkMdViewer::new_with_image_prefix(&markdown_content, &img_prefix);
 
         scroll.set_child(Some(&mdviewer));
         window.set_child(Some(&scroll));
