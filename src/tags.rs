@@ -76,7 +76,8 @@ impl Tags {
             Attribute::Heading5(_) => &self.heading5,
             Attribute::Bold(_) => &self.bold,
             Attribute::Italic(_) => &self.italic,
-            Attribute::Link(_) | Attribute::Picture => &self.link,
+            Attribute::Link(_) => &self.link,
+            Attribute::Picture(_) => &self.link,
         }
     }
 }
@@ -120,7 +121,8 @@ impl GtkMdBlock {
             Attribute::Heading4(text) |
             Attribute::Heading5(text) |
             Attribute::Bold(text) |
-            Attribute::Italic(text) => {
+            Attribute::Italic(text) |
+            Attribute::Link((text, _)) => {
                 buffer.delete(
                     &mut buffer.iter_at_mark(&self.span_start),
                     &mut buffer.iter_at_mark(&self.span_end),
@@ -131,8 +133,7 @@ impl GtkMdBlock {
                     &[tag]
                 );
             },
-            Attribute::Link(_) |
-            Attribute::Picture => {
+            Attribute::Picture(_) => {
                 buffer.apply_tag(
                     tag,
                     &mut buffer.iter_at_mark(&self.span_start),

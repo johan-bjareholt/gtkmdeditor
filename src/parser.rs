@@ -2,6 +2,14 @@ use std::ops::Range;
 
 use logos::{Logos, Lexer};
 
+fn parse_picture(lex: &mut Lexer<Attribute>) -> (String, String) {
+    let len = lex.slice().len();
+    let title_end = lex.slice().find("]").unwrap();
+    let title = lex.slice()[2..title_end].to_string();
+    let location = lex.slice()[title_end+2..len-1].to_string();
+    (title, location)
+}
+
 fn parse_link(lex: &mut Lexer<Attribute>) -> (String, String) {
     let len = lex.slice().len();
     let title_end = lex.slice().find("]").unwrap();
@@ -41,8 +49,8 @@ pub enum Attribute {
 
     #[regex(r"\[[^\n\]]*\]\([^\n\)]*\)", |lex| parse_link(lex))]
     Link((String, String)),
-    #[regex(r"!\[[^\n\]]*\]\([^\n\)]*\)")]
-    Picture,
+    #[regex(r"!\[[^\n\]]*\]\([^\n\)]*\)", |lex| parse_picture(lex))]
+    Picture((String, String)),
 }
 
 #[derive(Debug)]
@@ -163,7 +171,7 @@ mod tests {
         let attributes = get_blocks(text);
         assert_eq!(attributes.len(), 1);
 
-        assert_eq!(attributes[0].attr, Attribute::Picture);
+        assert_eq!(attributes[0].attr, Attribute::Picture(("a picture".to_string(), "mypic.png".to_string())));
         let slice: &str = &text[attributes[0].span.clone()];
         assert_eq!(slice, "![a picture](mypic.png)");
     }
