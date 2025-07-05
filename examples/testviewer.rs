@@ -39,7 +39,7 @@ fn main() -> glib::ExitCode {
             .vexpand(true)
             .build();
 
-        let mdviewer = gtkmdeditor::GtkMdViewer::new(EXAMPLE_TEXT);
+        let mdviewer = gtkmdeditor::GtkMdViewer::new_with_image_prefix(EXAMPLE_TEXT, "./");
 
         scroll.set_child(Some(&mdviewer));
         window.set_child(Some(&scroll));
