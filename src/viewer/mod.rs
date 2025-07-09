@@ -1,7 +1,5 @@
 use gtk::glib;
 use gtk4 as gtk;
-use gtk::prelude::*;
-use std::path::Path;
 
 mod imp;
 
@@ -27,28 +25,5 @@ impl GtkMdViewer {
             .property("hexpand", &true)
             .property("vexpand", &true)
             .build()
-    }
-
-
-
-    fn add_images(&self, images: &[(String, String)], img_prefix: &str) {
-        let flowbox = gtk::FlowBox::new();
-        flowbox.set_selection_mode(gtk::SelectionMode::None);
-        
-        for (_alt_text, image_path) in images {
-            let full_path = if img_prefix.is_empty() {
-                image_path.clone()
-            } else {
-                Path::new(img_prefix).join(image_path).to_string_lossy().to_string()
-            };
-            
-            let picture = gtk::Picture::for_filename(&full_path);
-            picture.set_keep_aspect_ratio(true);
-            picture.set_can_shrink(true);
-            
-            flowbox.insert(&picture, -1);
-        }
-        
-        self.append(&flowbox);
     }
 }

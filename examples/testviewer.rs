@@ -19,8 +19,6 @@ fn main() -> glib::ExitCode {
 
         // Create scrolled window
         let scroll = gtk::ScrolledWindow::builder()
-            .hexpand(true)
-            .vexpand(true)
             .build();
 
         // Get file path from args or use default

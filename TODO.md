@@ -1,6 +1,5 @@
 TODO
 ====
 
-* Better layout of images
-* Test multiple images
+* Text view should have same background color as imageblock
 * C-bindings and example for viewer

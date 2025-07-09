@@ -4,12 +4,12 @@ use gtk4::glib::translate::*;
 use gtk4::prelude::*;
 use std::ffi::c_void;
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn gtk_md_editor_get_type() -> glib::Type {
     GtkMdEditor::static_type()
 }
 
-#[no_mangle]
+#[unsafe(no_mangle)]
 pub extern "C" fn gtk_md_editor_new() -> *mut c_void {
     let editor = GtkMdEditor::new();
     // Cast to Widget first, then convert to pointer
