@@ -161,6 +161,12 @@ impl GtkMdViewer {
         textview.set_property("editable", false);
         textview.set_property("wrap-mode", gtk::WrapMode::Word);
 
+        // If the app uses libadwaita, the textview will get the same background color as all other
+        // widgets, instead of e.g. the "bright white" background color that textviews use by
+        // default. That makes the GtkMdViewer widget have the same background color in the whole
+        // widget.
+        textview.add_css_class("background");
+
         textview.upcast()
     }
 }
