@@ -25,11 +25,19 @@ fn main() {
     let pc_path = Path::new(&build_dir).join("gtkmdeditor.pc");
     fs::write(&pc_path, pc_file).unwrap();
 
-    // Copy header file to include directory
-    let header_src = Path::new(&manifest_dir).join("src/ffi/gtkmdeditor.h");
-    let header_dest = Path::new(&build_dir).join("include/gtkmdeditor/gtkmdeditor.h");
-    fs::create_dir_all(header_dest.parent().unwrap()).unwrap();
-    fs::copy(header_src, header_dest).unwrap();
+    // Copy headers to include directory
+    let headers_src = Path::new(&manifest_dir).join("src/ffi/");
+    let headers_dest = Path::new(&build_dir).join("include/gtkmdeditor/");
+    fs::create_dir_all(&headers_dest).unwrap();
+    fs::copy(
+        Path::new(&headers_src).join("gtkmdeditor.h"),
+        Path::new(&headers_dest).join("gtkmdeditor.h")
+    ).unwrap();
+    fs::copy(
+        Path::new(&headers_src).join("gtkmdviewer.h"),
+        Path::new(&headers_dest).join("gtkmdviewer.h")
+    ).unwrap();
 
     println!("cargo:rerun-if-changed=src/ffi/gtkmdeditor.h");
+    println!("cargo:rerun-if-changed=src/ffi/gtkmdviewer.h");
 }

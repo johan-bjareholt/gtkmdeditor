@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "gtkmdeditor.h"
+#include "gtkmdviewer.h"
 
 typedef struct {
     char *file_path;
@@ -21,15 +21,14 @@ static void activate(GtkApplication *app, gpointer user_data) {
         g_application_quit(G_APPLICATION(app));
         return;
     }
+    g_autofree const char* img_prefix = g_path_get_dirname(app_data->file_path);
 
     // Create a scrolled window
     GtkWidget *scrolled = gtk_scrolled_window_new();
     gtk_window_set_child(GTK_WINDOW(window), scrolled);
 
     // Add the editor to the scrolled window
-    GtkWidget *editor = gtk_md_editor_new();
-    GtkTextBuffer *text_buffer = gtk_text_view_get_buffer((GtkTextView*) editor);
-    gtk_text_buffer_set_text(text_buffer, content, -1);
+    GtkWidget *editor = gtk_md_viewer_new_with_img_prefix(content, img_prefix);
 
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrolled), editor);
 

@@ -39,12 +39,19 @@ PKGCONFIG = pkg-config
 CFLAGS = $(shell $(PKGCONFIG) --cflags gtk4) -I./target/debug/include/gtkmdeditor
 LDFLAGS = $(shell $(PKGCONFIG) --libs gtk4) -L./target/debug -lgtkmdeditor
 
-.PHONY: build-c-example
-build-c-example: target/testeditor_c
+.PHONY: build-c-examples
+build-c-examples: target/testeditor_c target/testviewer_c
 
-target/c_example: examples/testeditor.c build
+target/testeditor_c: examples/testeditor.c build
 	mkdir -p target
 	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
 
-run-c-example: target/c_example
+target/testviewer_c: examples/testviewer.c build
+	mkdir -p target
+	$(CC) -o $@ $< $(CFLAGS) $(LDFLAGS)
+
+run-testeditor-c: target/testeditor_c
+	LD_LIBRARY_PATH=./target/debug $<
+
+run-testviewer-c: target/testviewer_c
 	LD_LIBRARY_PATH=./target/debug $<
