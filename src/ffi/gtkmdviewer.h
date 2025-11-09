@@ -1,13 +1,13 @@
-#ifndef GTK_MD_EDITOR_H
-#define GTK_MD_EDITOR_H
+#ifndef GTK_MD_VIEWER_H
+#define GTK_MD_VIEWER_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_MD_EDITOR (gtk_md_viewer_get_type())
-#define GTK_MD_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_MD_EDITOR, GtkMdViewer))
-#define GTK_IS_MD_EDITOR(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_MD_EDITOR))
+#define GTK_TYPE_MD_VIEWER (gtk_md_viewer_get_type())
+#define GTK_MD_VIEWER(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_MD_VIEWER, GtkMdViewer))
+#define GTK_IS_MD_VIEWER(obj) (G_TYPE_CHECK_INSTANCE_TYPE((obj), GTK_TYPE_MD_VIEWER))
 
 typedef struct _GtkMdViewer GtkMdViewer;
 
@@ -17,4 +17,4 @@ GtkWidget* gtk_md_viewer_new_with_img_prefix(const char* md_text, const char* im
 
 G_END_DECLS
 
-#endif /* GTK_MD_EDITOR_H */
+#endif /* GTK_MD_VIEWER_H */

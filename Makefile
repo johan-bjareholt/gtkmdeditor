@@ -4,7 +4,8 @@
 PREFIX:=/usr/local
 
 SOFILE=target/debug/libgtkmdeditor.so
-HEADER=target/debug/include/gtkmdeditor/gtkmdeditor.h
+HEADER_SRCDIR=target/debug/include/gtkmdeditor
+HEADER_DESTDIR=$(PREFIX)/include/gtkmdeditor
 PCFILE=target/debug/gtkmdeditor.pc
 
 all: build
@@ -22,8 +23,8 @@ install:
 	install -d $(PREFIX)/lib/
 	install $(SOFILE) $(PREFIX)/lib/libgtkmdeditor.so
 	install -d $(PREFIX)/include/gtkmdeditor
-	install $(HEADER) $(PREFIX)/include/gtkmdeditor/gtkmdeditor.h
-	install $(HEADER) $(PREFIX)/include/gtkmdeditor/gtkmdviewer.h
+	install $(HEADER_SRCDIR)/gtkmdeditor.h $(HEADER_DESTDIR)/gtkmdeditor.h
+	install $(HEADER_SRCDIR)/gtkmdviewer.h $(HEADER_DESTDIR)/gtkmdviewer.h
 	install -d $(PREFIX)/lib/pkgconfig/
 	install $(PCFILE) $(PREFIX)/lib/pkgconfig/gtkmdeditor.pc
 
