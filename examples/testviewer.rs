@@ -5,6 +5,9 @@ use std::fs;
 use std::env;
 
 fn main() -> glib::ExitCode {
+    #[cfg(feature = "adw")]
+    adw::init().unwrap();
+
     let application = gtk::Application::builder()
         .application_id("com.bjareholt.johan.GtkMdViewer")
         .build();

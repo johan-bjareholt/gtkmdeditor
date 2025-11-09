@@ -161,12 +161,6 @@ impl GtkMdViewer {
         textview.set_property("editable", false);
         textview.set_property("wrap-mode", gtk::WrapMode::Word);
 
-        // If the app uses libadwaita, the textview will get the same background color as all other
-        // widgets, instead of e.g. the "bright white" background color that textviews use by
-        // default. That makes the GtkMdViewer widget have the same background color in the whole
-        // widget.
-        textview.add_css_class("background");
-
         textview.upcast()
     }
 }
@@ -191,6 +185,16 @@ impl ObjectImpl for GtkMdViewer {
         // Render content after construction when both properties are available
         let md_text = self.md_text.borrow();
         let img_prefix = self.img_prefix.borrow();
+
+        // This sets the same background colour as textview.
+        // See here why this only works with libadwaita:
+        // https://discourse.gnome.org/t/replacement-for-gtk-style-context-get-color/23026
+        #[cfg(feature = "adw")]
+        {
+            let widget = obj.clone().upcast::<gtk::Widget>();
+            widget.add_css_class("view");
+        }
+
         self.render_content(&md_text, &img_prefix);
     }
 
