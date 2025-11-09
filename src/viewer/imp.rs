@@ -64,7 +64,7 @@ impl GtkMdViewer {
             };
 
             let picture = gtk::Picture::for_filename(&full_path);
-            picture.set_keep_aspect_ratio(true);
+            picture.set_content_fit(gtk::ContentFit::Contain);
             picture.set_halign(gtk::Align::Start);
             picture.set_valign(gtk::Align::Start);
             picture.set_size_request(200, 150);
