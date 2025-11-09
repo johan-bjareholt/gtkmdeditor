@@ -23,6 +23,7 @@ install:
 	install $(SOFILE) $(PREFIX)/lib/libgtkmdeditor.so
 	install -d $(PREFIX)/include/gtkmdeditor
 	install $(HEADER) $(PREFIX)/include/gtkmdeditor/gtkmdeditor.h
+	install $(HEADER) $(PREFIX)/include/gtkmdeditor/gtkmdviewer.h
 	install -d $(PREFIX)/lib/pkgconfig/
 	install $(PCFILE) $(PREFIX)/lib/pkgconfig/gtkmdeditor.pc
 
