@@ -13,6 +13,7 @@ pub struct Tags {
     bold: gtk::TextTag,
     italic: gtk::TextTag,
     link: gtk::TextTag,
+    text: gtk::TextTag,
 }
 
 impl Tags {
@@ -55,6 +56,10 @@ impl Tags {
             )
             .expect("Failed to create link tag");
 
+        let text = buffer
+            .create_tag(Some("text"), &[])
+            .expect("Failed to create text tag");
+
         Self {
             heading1,
             heading2,
@@ -64,6 +69,7 @@ impl Tags {
             bold,
             italic,
             link,
+            text,
         }
     }
 
@@ -78,6 +84,7 @@ impl Tags {
             Attribute::Italic(_) => &self.italic,
             Attribute::Link(_) => &self.link,
             Attribute::Picture(_) => &self.link,
+            Attribute::Text(_) => &self.text,
         }
     }
 }
@@ -122,7 +129,8 @@ impl GtkMdBlock {
             Attribute::Heading5(text) |
             Attribute::Bold(text) |
             Attribute::Italic(text) |
-            Attribute::Link((text, _)) => {
+            Attribute::Link((text, _)) |
+            Attribute::Text(text) => {
                 buffer.delete(
                     &mut buffer.iter_at_mark(&self.span_start),
                     &mut buffer.iter_at_mark(&self.span_end),
