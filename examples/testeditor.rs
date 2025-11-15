@@ -52,5 +52,5 @@ fn main() -> glib::ExitCode {
         window.present();
     });
 
-    application.run()
+    application.run_with_args::<&String>(&[])
 }

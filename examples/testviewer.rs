@@ -12,6 +12,7 @@ fn main() -> glib::ExitCode {
         .application_id("com.bjareholt.johan.GtkMdViewer")
         .build();
 
+
     application.connect_activate(|app| {
         let window = gtk::ApplicationWindow::builder()
             .application(app)
@@ -57,5 +58,5 @@ fn main() -> glib::ExitCode {
         window.present();
     });
 
-    application.run()
+    application.run_with_args::<&String>(&[])
 }
