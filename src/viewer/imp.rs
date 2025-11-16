@@ -75,12 +75,12 @@ impl GtkMdViewer {
         flowbox.upcast()
     }
 
-    fn group_into_content_blocks(&self, blocks: Vec<Block>) -> Vec<ContentBlock> {
+    fn group_into_content_blocks(&self, mut blocks: Vec<Block>) -> Vec<ContentBlock> {
         let mut content_blocks = Vec::new();
         let mut current_text_blocks: Vec<Block> = Vec::new();
         let mut current_images: Vec<(String, String)> = Vec::new();
 
-        for block in blocks {
+        for block in blocks.drain(..) {
             match &block.attr {
                 Attribute::Picture((alt, path)) => {
                     // If we have accumulated text blocks, create a TextBlock
